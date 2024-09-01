@@ -6,27 +6,53 @@ const modalCloseBtn = document.querySelector('[data-modal-close]');
 const modalCloseOverlay = document.querySelector('[data-modal-overlay]');
 
 // modal function
-const modalCloseFunc = function () { modal.classList.add('closed') }
+const modalCloseFunc = function () { 
+  modal.classList.add('closed');
+};
 
 // modal eventListener
 modalCloseOverlay.addEventListener('click', modalCloseFunc);
 modalCloseBtn.addEventListener('click', modalCloseFunc);
 
-
-
-
-
 // notification toast variables
 const notificationToast = document.querySelector('[data-toast]');
 const toastCloseBtn = document.querySelector('[data-toast-close]');
+const toastImages = document.querySelectorAll('.toast-banner img');
 
-// notification toast eventListener
+let toastTimeout;
+
+// Function to display a random toast image
+function displayRandomToast() {
+  clearTimeout(toastTimeout);  // Clear any existing timeouts
+
+  const randomIndex = Math.floor(Math.random() * toastImages.length);
+
+  // Hide all images and show the selected one
+  toastImages.forEach((img, index) => {
+    img.style.display = (index === randomIndex) ? 'block' : 'none';
+  });
+
+  // Show the notification toast
+  notificationToast.classList.remove('closed');
+  notificationToast.style.display = 'flex'; // Ensure it's visible
+
+  // Automatically hide the toast after 5 seconds
+  toastTimeout = setTimeout(() => {
+    notificationToast.classList.add('closed');
+  }, 5000); // Adjust the duration as needed
+}
+
+// Close notification toast when the close button is clicked
 toastCloseBtn.addEventListener('click', function () {
   notificationToast.classList.add('closed');
+  clearTimeout(toastTimeout);  // Prevent the toast from reopening automatically
 });
 
+// Trigger a random toast display every 10 seconds
+setInterval(displayRandomToast, 10000); // Change the interval as needed (milliseconds)
 
-//Dark Mode
+
+// Dark Mode
 const toggleSwitch = document.getElementById('dark-mode-checkbox');
 
 toggleSwitch.addEventListener('change', function() {
@@ -41,7 +67,6 @@ if (currentMode === 'enabled') {
     document.body.classList.add('dark-mode');
 }
 
-
 // mobile menu variables
 const mobileMenuOpenBtn = document.querySelectorAll('[data-mobile-menu-open-btn]');
 const mobileMenu = document.querySelectorAll('[data-mobile-menu]');
@@ -54,7 +79,7 @@ for (let i = 0; i < mobileMenuOpenBtn.length; i++) {
   const mobileMenuCloseFunc = function () {
     mobileMenu[i].classList.remove('active');
     overlay.classList.remove('active');
-  }
+  };
 
   mobileMenuOpenBtn[i].addEventListener('click', function () {
     mobileMenu[i].classList.add('active');
@@ -65,10 +90,6 @@ for (let i = 0; i < mobileMenuOpenBtn.length; i++) {
   overlay.addEventListener('click', mobileMenuCloseFunc);
 
 }
-
-
-
-
 
 // accordion variables
 const accordionBtn = document.querySelectorAll('[data-accordion-btn]');
